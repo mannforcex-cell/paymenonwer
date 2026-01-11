@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mann Force X - Premium Payment">
+    <title>ğ�™ˆğ�˜¼ğ�™‰ğ�™‰ ğ�™�ğ�™Šğ�™�ğ�˜¾ğ�™€ ğ�™“ | ğ�™‹ğ�˜¼ğ�™”ğ�™ˆğ�™€ğ�™‰ğ�™� ğ�™�ğ�™”ğ�™�ğ�™�ğ�™€ğ�™ˆ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base & Theme Merah Neon */
+        :root {
+            --neon-red: #ff003c;
+            --dark-bg: #050505;
+            --gold: #ffb800;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: #eee;
+            overflow-x: hidden;
+        }
+
+        /* Video Background Ejas Opacity */
+        #background-video {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; z-index: -1;
+            opacity: 0.2; /* Kurangkan sikit bagi nampak misteri */
+        }
+
+        /* Efek Glitch Tulisan */
+        .glitch {
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                         -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+                         0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            animation: glitch 500ms infinite;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 rgba(255,0,0,0.75); }
+            14% { text-shadow: 0.05em 0 0 rgba(255,0,0,0.75); }
+            15% { text-shadow: -0.05em -0.025em 0 rgba(0,255,0,0.75); }
+            100% { text-shadow: -0.025em 0.05em 0 rgba(0,0,255,0.75); }
+        }
+
+        /* Loading Bar Merah */
+        .game-progress {
+            background: linear-gradient(90deg, #ff0000, #ffb800) !important;
+            box-shadow: 0 0 20px var(--neon-red) !important;
+        }
+
+        /* Welcome Button */
+        .go-to-pay-btn {
+            background: transparent !important;
+            border: 2px solid var(--neon-red) !important;
+            color: var(--neon-red) !important;
+            box-shadow: inset 0 0 10px var(--neon-red), 0 0 10px var(--neon-red) !important;
+            border-radius: 0px !important; /* Petak lagi garang */
+        }
+
+        .go-to-pay-btn:hover {
+            background: var(--neon-red) !important;
+            color: white !important;
+            transform: skew(-10deg); /* Senget sikit bila hover */
+        }
+
+        /* Card Pembayaran Baru */
+        .payment-method {
+            background: rgba(255, 0, 0, 0.05) !important;
+            border-left: 5px solid var(--neon-red) !important;
+            border-radius: 0px !important;
+            transition: 0.4s;
+        }
+
+        .payment-method:hover {
+            background: rgba(255, 0, 0, 0.15) !important;
+            border-left: 10px solid var(--gold) !important;
+        }
+
+        .payment-name {
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            background: var(--neon-red) !important;
+            border-radius: 0px !important;
+        }
+
+        /* Toast & Audio */
+        .toast { border: 1px solid var(--neon-red); color: var(--neon-red); }
+        .audio-control { border: 1px solid var(--neon-red); background: black !important; }
+    </style>
+</head>
+<body>
+    <video id="background-video" autoplay muted loop playsinline>
+        <source src="https://files.catbox.moe/i6y0r2.mp4" type="video/mp4">
+    </video>
+    
+    <audio id="background-audio" loop>
+        <source src="https://trcminer.com/?agent_id=rashidyeop714" type="audio/mp4">
+    </audio>
+
+    <div class="audio-control" id="audio-control"><i class="fas fa-volume-up"></i></div>
+
+    <div id="loading-screen">
+        <div class="game-loading-container">
+            <div class="game-icon" style="color: var(--neon-red);"><i class="fas fa-skull"></i></div>
+            <div class="game-loading-text glitch">SYSTEM LOADING...</div>
+            <div class="game-progress-bar">
+                <div class="game-progress" id="game-progress"></div>
+            </div>
+            <div class="game-stats">
+                <span id="loading-status">Booting...</span>
+                <span id="progress-percent">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="welcome-screen" style="display:none;">
+        <h1 class="welcome-title glitch">MANN FORCE X</h1>
+        <p style="color: var(--gold); margin-bottom: 20px;">[ AUTHENTICATED ACCESS ONLY ]</p>
+        <button class="go-to-pay-btn" id="go-to-pay-btn">ENTER SYSTEM</button>
+        <p class="quote">"Siapa cepat, dia dapat. Siapa lambat, dia melarat."</p>
+    </div>
+
+    <div id="payment-screen" style="display:none; padding: 40px 20px; max-width: 800px; margin: 0 auto;">
+        <h1 class="payment-title glitch" style="text-align: center; margin-bottom: 40px;">SECURE CHECKOUT</h1>
+        
+        <div class="payment-method">
+            <div class="payment-header">
+                <div class="payment-logo" style="color: #00e5ff;"><i class="fas fa-bolt"></i></div>
+                <div class="payment-name">TNG / DUITNOW</div>
+            </div>
+            <div class="payment-details">
+                <div class="payment-number" style="font-size: 1.5rem;">141118363244</div>
+                <button class="copy-btn" data-number="141118363244">COPY KEY</button>
+            </div>
+        </div>
+
+        <div class="payment-method">
+            <div class="payment-header">
+                <div class="payment-logo" style="color: var(--gold);"><i class="fas fa-university"></i></div>
+                <div class="payment-name">BANK ISLAM</div>
+            </div>
+            <div class="payment-details">
+                <div class="payment-number" style="color: #777;">03063028894106</div>
+            </div>
+        </div>
+
+        <div class="payment-method" style="text-align: center;">
+            <p style="color: var(--neon-red); margin-bottom: 15px;">SCAN TO PAY (ALL WALLET)</p>
+            <img src="https://files.catbox.moe/9vl9kj.jpg" alt="QR" style="max-width: 250px; border: 2px solid var(--neon-red);">
+            <div style="margin-top: 15px;">
+                <button class="copy-btn" id="zoom-qris">ZOOM QR</button>
+            </div>
+        </div>
+
+        <div class="contacts-section" style="margin-top: 40px; text-align: center;">
+            <p style="color: var(--gold);">NEED HELP?</p>
+            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
+                <a href="https://wa.me/601139183035" style="color: white; text-decoration: none;"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a href="https://t.me/ManForceX_Official" style="color: white; text-decoration: none;"><i class="fab fa-telegram"></i> Telegram</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Copy Paste script JS kau yang asal kat sini bro, abg tak tukar logic dia
+        // Cuma pastikan ID element sama.
+        const audio = document.getElementById('background-audio');
+        const audioCtrl = document.getElementById('audio-control');
+        const loadingScreen = document.getElementById('loading-screen');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const paymentScreen = document.getElementById('payment-screen');
+        const goToPayBtn = document.getElementById('go-to-pay-btn');
+        const progressBar = document.getElementById('game-progress');
+        const progressPercent = document.getElementById('progress-percent');
+        const toast = document.getElementById('toast');
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 10;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    welcomeScreen.style.display = 'flex';
+                }, 500);
+            }
+            progressBar.style.width = progress + '%';
+            progressPercent.textContent = Math.floor(progress) + '%';
+        }, 150);
+
+        goToPayBtn.addEventListener('click', () => {
+            welcomeScreen.style.display = 'none';
+            paymentScreen.style.display = 'block';
+            audio.play().catch(e => {});
+        });
+
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const num = btn.dataset.number;
+                if(num) {
+                    navigator.clipboard.writeText(num);
+                    toast.textContent = "COPIED TO SYSTEM!";
+                    toast.style.opacity = 1;
+                    setTimeout(() => toast.style.opacity = 0, 2000);
+                }
+            });
+        });
+
+        // Toggle Audio
+        audioCtrl.addEventListener('click', () => {
+            if (audio.paused) { audio.play(); audioCtrl.innerHTML = '<i class="fas fa-volume-up"></i>'; }
+            else { audio.pause(); audioCtrl.innerHTML = '<i class="fas fa-volume-mute"></i>'; }
+        });
+    </script>
+</body>
+</html>
